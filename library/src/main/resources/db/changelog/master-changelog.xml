@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+    <include file="db/changelog/v1/changelog-1.0.2-create-tables.xml"/>
+    <changeSet author="liquibase-docs" id="loadData-example">
+        <loadData file="db/changelog/init/data.csv" tableName="books_records"/>
+    </changeSet>
+</databaseChangeLog>
