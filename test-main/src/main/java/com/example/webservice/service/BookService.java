@@ -4,10 +4,11 @@ import com.example.webservice.config.LibraryServiceClient;
 import com.example.webservice.exception.BookAlreadyExists;
 import com.example.webservice.exception.EmptyBookStorage;
 import com.example.webservice.exception.InvalidBookData;
+import com.example.webservice.model.dto.BookRecord;
 import com.example.webservice.model.entity.Book;
 import com.example.webservice.repository.BookJpaRepository;
-import jakarta.persistence.EntityManager;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,7 +18,6 @@ import java.util.Optional;
 @AllArgsConstructor
 public class BookService {
     private final BookJpaRepository bookJpaRepository;
-    private final EntityManager entityManager;
     private final LibraryServiceClient libraryServiceClient;
     public List<Book> findAllBooks() throws EmptyBookStorage {
         List<Book> books = bookJpaRepository.findAll();
@@ -37,11 +37,13 @@ public class BookService {
         return Optional.of(book);
     }
     public Optional<Book> addBook(Book book) throws BookAlreadyExists {
-        if (entityManager.isOpen() && entityManager.contains(book))
+        if (bookJpaRepository.exists(Example.of(book)))
             throw new BookAlreadyExists(BookAlreadyExists.BOOK_ALREADY_EXISTS);
         System.out.println(book);
-        libraryServiceClient.sendPost(book.getId());
-        return Optional.of(bookJpaRepository.save(book));
+        book = bookJpaRepository.save(book);
+        libraryServiceClient.sendPost(new BookRecord(book.getId(), null, null));
+        System.out.println("Book was succesfully added to the microservice");
+        return Optional.of(book);
     }
     public Optional<Book> updateBook(Book book) throws InvalidBookData {
         if (book == null)
