@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
+
+    <changeSet id="1.0.1" author="Metal">
+        <createTable tableName="authorities">
+            <column name="id" type="int4">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="roles">
+            <column name="id" type="int4" >
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="name" type="varchar(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="roles_authorities">
+            <column name="role_id" type="int4" >
+                <constraints nullable="true" foreignKeyName="fk_joint_roles" references="roles(id)"/>
+            </column>
+            <column name="authority_id" type="int4" >
+                <constraints nullable="true" foreignKeyName="fk_joint_authorities" references="authorities(id)"/>
+            </column>
+        </createTable>
+
+        <createTable tableName="users">
+            <column name="id" type="bigint" >
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="username" type="varchar(20)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role_id" type="int4">
+                <constraints nullable="true" foreignKeyName="fk_users_roles" references="roles(id)"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
