@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 public class LibraryServiceClient {
     private final RestTemplate restTemplate;
     public ResponseEntity<BookRecord> sendPost(BookRecord bookRecord) {
-        final var url = "http://book-service/records";
+        final var url = "http://proxy/library-service/records";
         HttpEntity<BookRecord> request = new HttpEntity<>(bookRecord);
         BookRecord res = restTemplate.postForObject(url, request, BookRecord.class);
         return ResponseEntity.ok(res);

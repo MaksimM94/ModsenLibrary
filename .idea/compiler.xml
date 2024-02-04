@@ -7,9 +7,10 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="auth-service" />
+        <module name="library-service" />
         <module name="book-service" />
         <module name="eureka" />
-        <module name="web-service" />
+        <module name="gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
@@ -23,7 +24,8 @@
       <module name="auth-service" options="-parameters" />
       <module name="book-service" options="-parameters" />
       <module name="eureka" options="-parameters" />
-      <module name="web-service" options="-parameters" />
+      <module name="gateway" options="-parameters" />
+      <module name="library-service" options="-parameters" />
       <module name="web-service (1)" options="-parameters" />
       <module name="web-service (2)" options="-parameters" />
     </option>
