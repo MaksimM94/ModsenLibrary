@@ -73,12 +73,13 @@ public class JwtProvider {
         return false;
     }
     private String generateToken(Map<String, Object> claims, String subject) {
+        String encodedString = Base64.getEncoder().encodeToString(secret.getBytes());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(calcExpirationDateFromNow())
-                .signWith(SignatureAlgorithm.HS256, secret)
+                .signWith(SignatureAlgorithm.HS256, encodedString)
                 .compact();
     }
     private Date calcExpirationDateFromNow() {

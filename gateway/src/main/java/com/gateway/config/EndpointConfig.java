@@ -27,7 +27,7 @@ public class EndpointConfig {
         EndpointInfo booksEndpointInfo =
                 EndpointInfo
                         .builder()
-                        .uri("/records/**")
+                        .uri("/records")
                         .securedMethods(
                                 List.of(HttpMethod.POST, HttpMethod.PATCH)
                         ).build();

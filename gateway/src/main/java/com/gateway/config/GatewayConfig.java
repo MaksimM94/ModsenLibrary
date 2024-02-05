@@ -26,7 +26,6 @@ public class GatewayConfig {
                                     filter.stripPrefix(1);
                                     filter.filter(authenticationFilter);
                                     return filter;
-
                                 }
                                 )
                                 .uri("lb://book-service"))
@@ -35,6 +34,11 @@ public class GatewayConfig {
                                 .filters(filter -> filter.stripPrefix(1)
                                 )
                                 .uri("lb://library-service"))
+                .route("auth-service",
+                        route -> route.path("/auth-service/**")
+                                .filters(filter -> filter.stripPrefix(1)
+                                )
+                                .uri("lb://auth-service"))
                 .build();
     }
 }
