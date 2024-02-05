@@ -14,6 +14,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="jwt-repeat-88" target="17" />
       <module name="untitled" target="1.7" />
       <module name="web-service (1)" target="17" />
       <module name="web-service (2)" target="17" />
@@ -25,6 +26,7 @@
       <module name="book-service" options="-parameters" />
       <module name="eureka" options="-parameters" />
       <module name="gateway" options="-parameters" />
+      <module name="jwt-repeat-88" options="-parameters" />
       <module name="library-service" options="-parameters" />
       <module name="web-service (1)" options="-parameters" />
       <module name="web-service (2)" options="-parameters" />

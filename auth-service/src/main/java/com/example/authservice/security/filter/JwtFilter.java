@@ -28,6 +28,10 @@ public class JwtFilter extends OncePerRequestFilter {
         String username = null;
         String jwt = null;
         jwt = extractTokenFromRequest(request);
+        if (jwt == null) {
+            filterChain.doFilter(request, response);
+            return;
+        }
         username = jwtProvider.extractUsername(jwt);
         if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             String commaSeparatedListOfAuthorities = jwtProvider.extractAuthorities(jwt);

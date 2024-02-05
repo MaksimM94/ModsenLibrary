@@ -29,5 +29,6 @@ public class AuthService {
         }
         String token = jwtProvider.createToken((UserDetails) authentication.getPrincipal());
         return new JwtResponse(token);
+
     }
 }

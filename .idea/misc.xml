@@ -12,6 +12,7 @@
         <option value="$PROJECT_DIR$/library-service/pom.xml" />
         <option value="$PROJECT_DIR$/eureka/pom.xml" />
         <option value="$PROJECT_DIR$/gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/jwt-repeat-88/jwt-repeat-88/pom.xml" />
       </list>
     </option>
   </component>

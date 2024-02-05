@@ -30,7 +30,7 @@ public class AuthenticationFilter implements GatewayFilter {
             if (this.isAuthMissing(request))
                 return this.onError(exchange, "Authorization header is missing in request", HttpStatus.UNAUTHORIZED);
 
-            final String token = this.getAuthHeader(request);
+            final String token = this.getAuthHeader(request).substring(7);
             JwtValidityResponse response = jwtUtil.validateToken(new JwtValidityRequest(token));
             if (response != null && response.getTokenStatus().equals(TokenStatus.EXPIRED))
                 return this.onError(exchange, "Authorization header is invalid", HttpStatus.UNAUTHORIZED);

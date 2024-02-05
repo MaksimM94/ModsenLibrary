@@ -14,11 +14,7 @@ public class TokenValidityService {
     public JwtValidityResponse validateToken(JwtValidityRequest jwtValidityRequest) {
         String token = jwtValidityRequest.getToken();
         if (token == null)
-            return JwtValidityResponse
-                    .builder()
-                    .token(token)
-                    .tokenStatus(TokenStatus.EXPIRED)
-                    .build();
+            return null;
         boolean validity = jwtProvider.validateToken(token);
         TokenStatus tokenStatus = validity ? TokenStatus.VALID : TokenStatus.EXPIRED;
         return JwtValidityResponse.builder()

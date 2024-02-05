@@ -14,15 +14,8 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class JwtProvider {
-    private final String secret;
-    private final long expiration;
-    public JwtProvider(
-            @Value("${jwt.secret}") String secret,
-            @Value("${jwt.expiration}") long expiration
-    ) {
-        this.secret = secret;
-        this.expiration = expiration;
-    }
+    private static final String secret="secret";
+    private static final long expiration=86400;
     public String createToken(UserDetails userDetails) {
         System.out.println(userDetails);
         Map<String, Object> claims = new HashMap<>();
@@ -38,26 +31,26 @@ public class JwtProvider {
         return extractClaim(token, extractFunc);
     }
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        if (token != null) return extractClaim(token, Claims::getSubject);
+        return null;
     }
     private <T> T extractClaim(String token, Function<Claims, T> extractFunc) {
         Claims claims = extractAllClaims(token);
         return extractFunc.apply(claims);
     }
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
+        if (token!=null) return Jwts.parser()
                 .setSigningKey(secret)
                 .parseClaimsJws(token)
                 .getBody();
+        return null;
     }
     public String mapAuthorityToGrantedAuthorityString(Collection<? extends GrantedAuthority> authorityList) {
         return authorityList.stream().map(GrantedAuthority::getAuthority).collect(Collectors.joining(","));
     }
     public boolean validateToken(String token) {
         try {
-            Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token);
+            extractAllClaims(token);
             return true;
         } catch (ExpiredJwtException expEx) {
             log.error("Token expired", expEx);
@@ -73,13 +66,12 @@ public class JwtProvider {
         return false;
     }
     private String generateToken(Map<String, Object> claims, String subject) {
-        String encodedString = Base64.getEncoder().encodeToString(secret.getBytes());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(calcExpirationDateFromNow())
-                .signWith(SignatureAlgorithm.HS256, encodedString)
+                .signWith(SignatureAlgorithm.HS256, secret)
                 .compact();
     }
     private Date calcExpirationDateFromNow() {

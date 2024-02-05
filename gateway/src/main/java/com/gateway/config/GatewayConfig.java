@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 
-//https://mayankposts.medium.com/adding-security-to-micro-services-spring-boot-gateway-filter-jwt-authentication-part-2-4ba8cb572312
 @Configuration
 @AllArgsConstructor
 public class GatewayConfig {
