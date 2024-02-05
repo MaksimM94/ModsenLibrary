@@ -44,6 +44,10 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterAt(jwtFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling(httpSecurityExceptionHandlingConfigurer ->
+                    httpSecurityExceptionHandlingConfigurer.authenticationEntryPoint(
+                            (req, res, ex) -> res.sendRedirect("/auth"))
+                )
                 .build();
     }
 }
