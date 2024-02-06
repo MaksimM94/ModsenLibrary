@@ -4,7 +4,7 @@
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.8.xsd">
 
-    <changeSet id="1.0.3" author="Metal">
+    <changeSet id="1.2.3" author="Metal">
         <createTable tableName="books">
             <column name="id" type="serial" >
                 <constraints primaryKey="true" nullable="false"/>

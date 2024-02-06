@@ -1,40 +1,111 @@
 version: '3.8'
-
+networks:
+  my-network:
+    driver: "bridge"
 services:
   postgres:
-    build:
-      context: services/postgres
-      dockerfile: Dockerfile.development
+    image: postgres:12-alpine
     ports:
-      - "5433:5432"
+      - "5434:5432"
     environment:
       - POSTGRES_USER=postgres
-      - POSTGRES_DB=vv
-      - POSTGRES_PASSWORD=qqq
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASE=postgres
     volumes:
       - "db-data:/var/lib/postgresql/data"
-  app:
-    build:
-      context: services/app
-      dockerfile: Dockerfile.development
+    restart: always
+    networks:
+      - my-network
 
+  eureka:
+    build:
+      context: services/eureka
+      dockerfile: Dockerfile
+    image: 'eureka'
     environment:
-      - PORT=8091
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres/vv
-      - JS_URL=http://localhost
-    image: 'my-java-app'
+      eureka.instance.hostname: eureka-server
+      eureka.client.serviceUrl.defaultZone: http://eureka-server:8761/eureka/
     ports:
-      - 8091:8091
+      - 8761:8761
+    restart: always
+    networks:
+      - my-network
+
+  auth-service:
+    build:
+      context: services/auth-service
+      dockerfile: Dockerfile
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+      spring.datasource.url: jdbc:postgresql://postgres/postgres
+      spring.datasource.username: postgres
+      spring.datasource.password: qqq
+    image: 'auth-service'
+    ports:
+      - 8084:8084
     depends_on:
       - postgres
+      - eureka
+    restart: always
+    networks:
+      - my-network
 
-  js:
+  book-service:
     build:
-      context: services/js
-      dockerfile: Dockerfile.development
-    image: 'my-js-app'
+      context: services/book-service
+      dockerfile: Dockerfile
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+      spring.datasource.url: jdbc:postgresql://postgres/postgres
+      spring.datasource.username: postgres
+      spring.datasource.password: qqq
+    image: 'book-service'
     ports:
-      - 80:80
+      - 8082:8082
+    depends_on:
+      - postgres
+      - eureka
+      - proxy
+    restart: always
+    networks:
+      - my-network
 
+  library-service:
+    build:
+      context: services/library-service
+      dockerfile: Dockerfile
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+      spring.datasource.url: jdbc:postgresql://postgres/postgres
+      spring.datasource.username: postgres
+      spring.datasource.password: qqq
+    image: 'library-service'
+    ports:
+      - 8083:8083
+    depends_on:
+      - postgres
+      - eureka
+      - proxy
+      - book-service
+    restart: always
+    networks:
+      - my-network
+
+  proxy:
+    build:
+      context: services/gateway
+      dockerfile: Dockerfile
+    image: 'proxy'
+    environment:
+      eureka.client.serviceUrl.defaultZone: http://eureka:8761/eureka/
+    ports:
+      - "8081:8081"
+    expose:
+      - "8081"
+    depends_on:
+      - eureka
+    restart: always
+    networks:
+      - my-network
 volumes:
   db-data:
