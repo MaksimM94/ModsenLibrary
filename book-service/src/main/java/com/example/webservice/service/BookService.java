@@ -54,5 +54,6 @@ public class BookService {
         if (id == null)
             throw new InvalidBookData(InvalidBookData.INVALID_BOOK_ISBN);
         bookJpaRepository.deleteById(id);
+        libraryServiceClient.sendDelete(new BookRecord(id, null, null));
     }
 }

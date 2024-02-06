@@ -38,24 +38,17 @@ public class AuthenticationFilter implements GatewayFilter {
         }
         return chain.filter(exchange);
     }
-
-
-    /*PRIVATE*/
-
     private Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus httpStatus) {
         ServerHttpResponse response = exchange.getResponse();
         response.setStatusCode(httpStatus);
         return response.setComplete();
     }
-
     private String getAuthHeader(ServerHttpRequest request) {
         return request.getHeaders().getOrEmpty("Authorization").get(0);
     }
-
     private boolean isAuthMissing(ServerHttpRequest request) {
         return !request.getHeaders().containsKey("Authorization");
     }
-
     private void populateRequestWithHeaders(ServerWebExchange exchange, String token) {
         Claims claims = jwtUtil.extractAllClaims(token);
         exchange.getRequest().mutate()

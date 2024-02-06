@@ -6,6 +6,9 @@ import com.example.webservice.exception.InvalidBookData;
 import com.example.webservice.model.entity.Book;
 import com.example.webservice.service.BookService;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -19,7 +22,7 @@ public class BookRestController {
         return bookService.findAllBooks();
     }
     @GetMapping("/books/{id}")
-    public Book bookById(@PathVariable long id) throws InvalidBookData {
+    public Book bookById(@PathVariable Long id) throws InvalidBookData {
         return bookService.findBookById(id).get();
     }
     @GetMapping("/books/isbn/{isbn}")

@@ -21,7 +21,11 @@ public class BookRecordRestController {
         return ResponseEntity.of(bookRecordService.addRecord(bookRecord));
     }
     @PatchMapping("/records/{id}")
-    public BookRecord updateBookRecords(@PathVariable Long id) {
+    public BookRecord updateBookRecord(@PathVariable Long id) {
         return bookRecordService.updateRecord(id).get();
+    }
+    @DeleteMapping("/records/{id}")
+    public void deleteBookRecord(@PathVariable Long id) throws Exception {
+        bookRecordService.deleteRecord(id);
     }
 }

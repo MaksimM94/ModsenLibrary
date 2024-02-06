@@ -14,8 +14,15 @@ import java.util.stream.Collectors;
 @Component
 @Slf4j
 public class JwtProvider {
-    private static final String secret="secret";
-    private static final long expiration=86400;
+    private final String secret;
+    private final long expiration;
+    public JwtProvider(
+            @Value("${jwt.secret}") String secret,
+            @Value("${jwt.expiration}") long expiration
+    ) {
+        this.secret=secret;
+        this.expiration=expiration;
+    }
     public String createToken(UserDetails userDetails) {
         System.out.println(userDetails);
         Map<String, Object> claims = new HashMap<>();
@@ -75,6 +82,6 @@ public class JwtProvider {
                 .compact();
     }
     private Date calcExpirationDateFromNow() {
-        return new Date(System.currentTimeMillis() + expiration*1000);
+        return new Date(System.currentTimeMillis() + expiration * 1000);
     }
 }
